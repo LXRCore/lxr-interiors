@@ -1,140 +1,50 @@
 --[[
-    ██╗     ██╗  ██╗██████╗        ██████╗ ██████╗ ██████╗ ███████╗
-    ██║     ╚██╗██╔╝██╔══██╗      ██╔════╝██╔═══██╗██╔══██╗██╔════╝
-    ██║      ╚███╔╝ ██████╔╝█████╗██║     ██║   ██║██████╔╝█████╗  
-    ██║      ██╔██╗ ██╔══██╗╚════╝██║     ██║   ██║██╔══██╗██╔══╝  
-    ███████╗██╔╝ ██╗██║  ██║      ╚██████╗╚██████╔╝██║  ██║███████╗
-    ╚══════╝╚═╝  ╚═╝╚═╝  ╚═╝       ╚═════╝ ╚═════╝ ╚═╝  ╚═╝╚══════╝
+    ██╗     ██╗  ██╗██████╗       ██╗███╗   ██╗████████╗███████╗██████╗ ██╗ ██████╗ ██████╗ ███████╗
+    ██║     ╚██╗██╔╝██╔══██╗      ██║████╗  ██║╚══██╔══╝██╔════╝██╔══██╗██║██╔═══██╗██╔══██╗██╔════╝
+    ██║      ╚███╔╝ ██████╔╝█████╗██║██╔██╗ ██║   ██║   █████╗  ██████╔╝██║██║   ██║██████╔╝███████╗
+    ██║      ██╔██╗ ██╔══██╗╚════╝██║██║╚██╗██║   ██║   ██╔══╝  ██╔══██╗██║██║   ██║██╔══██╗╚════██║
+    ███████╗██╔╝ ██╗██║  ██║      ██║██║ ╚████║   ██║   ███████╗██║  ██║██║╚██████╔╝██║  ██║███████║
+    ╚══════╝╚═╝  ╚═╝╚═╝  ╚═╝      ╚═╝╚═╝  ╚═══╝   ╚═╝   ╚══════╝╚═╝  ╚═╝╚═╝ ╚═════╝ ╚═╝  ╚═╝╚══════╝
 
-    🐺 LXR Interiors System
+    LXR Core - Interiors
 
-    This configuration file controls the LXR Interiors system for RedM.
-    It activates interior entity sets and IMAPs so players can enter and
-    experience buildings and locations across the entire RDR2 game world.
+    The rooms the game leaves shut. Two kinds of map data, both in `data/`:
+    entity sets per interior (the furniture, windows and lights of banks,
+    saloons, stores) and IMAP pieces to request or remove. The client
+    applies them once, retrying until each interior has streamed in, and
+    then goes idle. Nothing here is gameplay; it is the stage.
 
-    ═══════════════════════════════════════════════════════════════════════════════
-    SERVER INFORMATION
-    ═══════════════════════════════════════════════════════════════════════════════
+    Brand:       LXRCore — Lux Empire eXperience RedM Core
+    Product:     wolves.land / The Land of Wolves
+    Developer:   iBoss21 / LXRCore
+    Website:     https://www.lxrcore.com
+    Discord:     https://discord.gg/ZHMKVYyhBa (development)
+    GitHub:      https://github.com/LXRCore
 
-    Server:      The Land of Wolves 🐺
-    Tagline:     Georgian RP 🇬🇪 | მგლების მიწა - რჩეულთა ადგილი!
-    Description: ისტორია ცოცხლდება აქ! (History Lives Here!)
-    Type:        Serious Hardcore Roleplay
-    Access:      Discord & Whitelisted
+    Version: 3.0.0
+    Performance Target: 0.00 ms idle (a retry loop that ends when every set is applied or `giveUpMinutes` passes)
 
-    Developer:   iBoss21 / The Lux Empire
-    Website:     https://www.wolves.land
-    Discord:     https://discord.gg/CrKcWdfd3A
-    GitHub:      https://github.com/iBoss21
-    Store:       https://theluxempire.tebex.io
-    Server:      https://servers.redm.net/servers/detail/8gj7eb
-
-    ═══════════════════════════════════════════════════════════════════════════════
-
-    Version: 1.0.0
-    Performance Target: Optimized for minimal client overhead
-
-    Tags: RedM, Interiors, Georgian, SeriousRP, Whitelist, EntitySets, IMAP
-
-    Framework Support:
-    - LXR Core (Primary)
-    - RSG Core (Compatible)
-    - VORP Core (Compatible)
-    - RedEM:RP (Compatible)
-    - QBR Core (Compatible)
-    - QR Core (Compatible)
-    - Standalone (Compatible)
-
-    ═══════════════════════════════════════════════════════════════════════════════
-    CREDITS
-    ═══════════════════════════════════════════════════════════════════════════════
-
-    Script Author: iBoss21 / The Lux Empire for The Land of Wolves
-
-    © 2026 iBoss21 / The Lux Empire | wolves.land | All Rights Reserved
+    © 2026 iBoss21 / LXRCore | lxrcore.com | All Rights Reserved
 ]]
 
-Config = {}
+Config = Config or {}
 
 -- ████████████████████████████████████████████████████████████████████████████████
--- ████████████████████████ SERVER BRANDING & INFO ████████████████████████████████
+-- ████████████████████████ LANGUAGE ██████████████████████████████████████████████
 -- ████████████████████████████████████████████████████████████████████████████████
-
-Config.ServerInfo = {
-    name        = 'The Land of Wolves 🐺',
-    tagline     = 'Georgian RP 🇬🇪 | მგლების მიწა - რჩეულთა ადგილი!',
-    description = 'ისტორია ცოცხლდება აქ!', -- History Lives Here!
-    type        = 'Serious Hardcore Roleplay',
-    access      = 'Discord & Whitelisted',
-
-    -- Contact & Links
-    website      = 'https://www.wolves.land',
-    discord      = 'https://discord.gg/CrKcWdfd3A',
-    github       = 'https://github.com/iBoss21',
-    store        = 'https://theluxempire.tebex.io',
-    serverListing = 'https://servers.redm.net/servers/detail/8gj7eb',
-
-    -- Developer Info
-    developer = 'iBoss21 / The Lux Empire',
-
-    -- Tags
-    tags = {'RedM', 'Georgian', 'SeriousRP', 'Whitelist', 'Interiors', 'EntitySets', 'IMAP'}
-}
+Config.Lang = 'en'
 
 -- ████████████████████████████████████████████████████████████████████████████████
--- ████████████████████████ FRAMEWORK CONFIGURATION ███████████████████████████████
+-- ████████████████████████ WHAT TO APPLY ═════════════════════════════════════════
 -- ████████████████████████████████████████████████████████████████████████████████
-
---[[
-    Framework Priority (in order):
-    1. LXR-Core (Primary)
-    2. RSG-Core (Primary)
-    3. VORP Core (Supported)
-    4. RedEM:RP  (Optional - if detected)
-    5. QBR-Core  (Optional - if detected)
-    6. QR-Core   (Optional - if detected)
-    7. Standalone (Fallback)
-]]
-
-Config.Framework = 'auto' -- 'auto' | 'lxr' | 'rsg' | 'vorp' | 'redem' | 'qbr' | 'qr' | 'standalone'
-
--- ████████████████████████████████████████████████████████████████████████████████
--- ████████████████████████ INTERIOR SETTINGS █████████████████████████████████████
--- ████████████████████████████████████████████████████████████████████████████████
-
 Config.Interiors = {
-    -- ─── General Settings ────────────────────────────────────────────────────────
-
-    -- Enable debug prints when interiors are activated/already active
-    Debug = false,
-
-    -- Which interior loader to use:
-    --   'basic' — Uses ActivateInteriorEntitySets (lighter, most locations)
-    --   'full'  — Uses RequestImap / RemoveImap in addition to entity sets
-    --   'both'  — Loads both basic entity sets and full IMAP requests
-    Mode = 'both',
-
-    -- ─── Basic Interior Activation (Entity Sets) ─────────────────────────────────
-    -- Controls whether the basic entity-set interior loader is active
-    EnableBasic = true,
-
-    -- ─── Full Interior Activation (IMAPs) ────────────────────────────────────────
-    -- Controls whether the full IMAP-based interior loader is active
-    EnableFull = true,
+    entitySets = true,            -- data/sets.lua
+    imaps = true,                 -- data/imaps.lua: Request
+    removeImaps = true,           -- data/imaps.lua: Remove
+    retrySeconds = 10,            -- between passes over interiors that have not streamed in yet
+    giveUpMinutes = 15,           -- stop retrying after this; /interiors reload starts again
+    skip = {},                    -- interior ids to leave alone, e.g. { 74241 } for the character creator room
 }
 
--- ████████████████████████████████████████████████████████████████████████████████
--- ████████████████████████ BOOT PRINT ████████████████████████████████████████████
--- ████████████████████████████████████████████████████████████████████████████████
-
-CreateThread(function()
-    print(([[
-        ═══════════════════════════════════════════════════════════════════════════════
-        🐺 LXR Interiors System — Loaded Successfully
-        ═══════════════════════════════════════════════════════════════════════════════
-        Server:    %s
-        Website:   %s
-        Discord:   %s
-        ═══════════════════════════════════════════════════════════════════════════════
-    ]]):format(Config.ServerInfo.name, Config.ServerInfo.website, Config.ServerInfo.discord))
-end)
+Config.Command = { name = 'interiors', permission = 'admin' }   -- /interiors status | reload
+Config.Debug = { printBanner = true, log = false }
